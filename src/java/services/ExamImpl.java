@@ -46,8 +46,6 @@ public class ExamImpl implements IExam {
     @Override
     public boolean saveUserSelectedAnswers(UserAnswers userAnswers, User user,String url, String usernameDB, String password) {
         
-        
-        
        String username= user.getUsername();
        services.UserImpl userService = new services.UserImpl(); 
        services.AnswerImpl ansService=new services.AnswerImpl();
@@ -62,7 +60,7 @@ public class ExamImpl implements IExam {
            try {
                answer=userAnswers.getSelectedAnswers().get(i);
                answerText=answer.getSelectedAnswer().getText();
-               answer_id=ansService.findAnsId( answerText);
+               answer_id=ansService.findAnsId(answerText);
                
                String query="INSERT INTO `users_answers` (`user_id`,`answer_id`) "
                        + "VALUES("
@@ -79,6 +77,7 @@ public class ExamImpl implements IExam {
                //return records;
            } catch (SQLException  | ClassNotFoundException  ex) {
                Logger.getLogger(ExamImpl.class.getName()).log(Level.SEVERE, null, ex);
+               return false;
            }
        
         }
