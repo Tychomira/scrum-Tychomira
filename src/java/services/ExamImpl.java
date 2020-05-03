@@ -67,7 +67,7 @@ public class ExamImpl implements IExam {
                String query="INSERT INTO `users_answers` (`user_id`,`answer_id`) "
                        + "VALUES("
                        + "'"+ user_id  +"',"
-                       +"'"+  answer_id   +"',"
+                       +"'"+  answer_id   +"'"
                        + "); ";
                
                Class.forName("com.mysql.cj.jdbc.Driver");
