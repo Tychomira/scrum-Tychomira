@@ -24,8 +24,12 @@ public interface IExam {
     boolean saveUser(User user);
     
     // Save selected answers to db from the user input
-    boolean saveUserSelectedAnswers(UserAnswers userAnswers);
+    boolean saveUserSelectedAnswers(UserAnswers userAnswers, User user, String url, String usernameDB, String password);
     
     // Get result from db
     Result getResult(User user);
+    
+    //select username to get userID 
+    
+    
 }

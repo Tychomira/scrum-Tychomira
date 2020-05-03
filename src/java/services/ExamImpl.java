@@ -6,8 +6,15 @@
 package services;
 
 import DummyData.DummyData;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Answer;
 import models.Question;
 import models.QuestionPossibleAnswers;
@@ -37,8 +44,46 @@ public class ExamImpl implements IExam {
     }
 
     @Override
-    public boolean saveUserSelectedAnswers(UserAnswers userAnswers) {
-        //boolean saved = examDao.saveUserSelectedAnswers(userAnswers);
+    public boolean saveUserSelectedAnswers(UserAnswers userAnswers, User user,String url, String usernameDB, String password) {
+        
+        
+        
+       String username= user.getUsername();
+       services.UserImpl userService = new services.UserImpl(); 
+       services.AnswerImpl ansService=new services.AnswerImpl();
+       int user_id=userService.findUsersId(username);
+     
+       int answer_id=0;
+       QuestionSelectedAnswer answer=null;
+        String answerText=null;
+       
+       for(int i =0; i<userAnswers.getSelectedAnswers().size(); i++)
+       { 
+           try {
+               answer=userAnswers.getSelectedAnswers().get(i);
+               answerText=answer.getSelectedAnswer().getText();
+               answer_id=ansService.findAnsId( answerText);
+               
+               String query="INSERT INTO `users_answers` (`user_id`,`answer_id`) "
+                       + "VALUES("
+                       + "'"+ user_id  +"',"
+                       +"'"+  answer_id   +"',"
+                       + "); ";
+               
+               Class.forName("com.mysql.cj.jdbc.Driver");
+               Connection connection=DriverManager.getConnection(url, usernameDB, password);
+               Statement st=connection.createStatement();
+               int records= st.executeUpdate(query);
+               st.close();
+               connection.close();
+               //return records;
+           } catch (SQLException  | ClassNotFoundException  ex) {
+               Logger.getLogger(ExamImpl.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       
+        }
+       return true;
+                //boolean saved = examDao.saveUserSelectedAnswers(userAnswers);
 //        if (!saved){
 //            //  oops something went wrong
 //            return false;
@@ -46,8 +91,28 @@ public class ExamImpl implements IExam {
 //        return true;
         
         // To be deleted
-        return false;
-    }
+
+
+        
+        }
+        
+     
+           
+           
+           
+       
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
     @Override
     public Result getResult(User user) {

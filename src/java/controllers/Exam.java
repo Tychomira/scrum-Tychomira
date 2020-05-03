@@ -24,6 +24,10 @@ import services.ExamImpl;
  */
 public class Exam extends HttpServlet {
     ExamImpl examService;
+     private String DB_URL="ra1.anystream.eu:3012";
+    private String url="jdbc:mysql://" + DB_URL + "/scrum?zeroDateTimeBehavior=CONVERT_TO_NULL&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false";
+    private String usernameDB="root";
+    private String password="AFDEmp_MySQL1";
     
     public Exam(){
         examService = new ExamImpl();
@@ -91,8 +95,12 @@ public class Exam extends HttpServlet {
         User user = userAnswers.getUser();
         // Save to db via the examService
         examService.saveUser(user);
-        examService.saveUserSelectedAnswers(userAnswers);
-       
+        examService.saveUserSelectedAnswers(userAnswers, user, url,  usernameDB, password);
+        
+        
+        
+        
+        
         // Get Results
         examService.getResult(user);
         // Forward to index.jsp
